@@ -45,13 +45,13 @@ You can preprocess your dataset like this:
     import librosa
     from datasets import Dataset
 
-# Example: Loading an Italian dataset
+    # Example: Loading an Italian dataset
     dataset = Dataset.from_dict({
        "text": ["Ciao, come stai?", "Buongiorno a tutti!"],
        "audio": ["path_to_audio_file1.wav", "path_to_audio_file2.wav"]
       })
 
-# Load the audio
+    # Load the audio
     def load_audio(batch):
         speech_array, sampling_rate = librosa.load(batch["audio"], sr=16000)
         batch["speech_array"] = speech_array
@@ -77,25 +77,25 @@ You can preprocess your dataset like this:
 
    3. Train the model:
 
-   from transformers import Trainer, TrainingArguments
-   # Define training arguments
-   training_args = TrainingArguments(
-     output_dir="./results",
-     per_device_train_batch_size=2,
-     num_train_epochs=3,
-     logging_dir='./logs',
-     save_steps=500,
-   )
+    from transformers import Trainer, TrainingArguments
+    # Define training arguments
+    training_args = TrainingArguments(
+      output_dir="./results",
+      per_device_train_batch_size=2,
+      num_train_epochs=3,
+      logging_dir='./logs',
+      save_steps=500,
+    )
 
-  # Initialize Trainer
-    trainer = Trainer(
-      model=model,
-      args=training_args,
-      train_dataset=dataset,
-   )
+    # Initialize Trainer
+     trainer = Trainer(
+       model=model,
+       args=training_args,
+       train_dataset=dataset,
+      )
 
-  # Train the model
-    trainer.train()
+    # Train the model
+     trainer.train()
 
    4. Save the model:
 
