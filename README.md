@@ -1,7 +1,7 @@
 # Fine-tuning SpeechT5 TTS Model for Italian
 
-               [Aumkeshchy2003/Italian_TTS
-](url)
+            Aumkeshchy2003/Italian_TTS
+    
 This repository provides a comprehensive guide to fine-tuning the SpeechT5 Text-to-Speech (TTS) model on Italian language datasets. The goal is to adapt Microsoft’s SpeechT5 model to generate Italian speech from text, leveraging the power of the Hugging Face Transformers library.
 Table of Contents
 
