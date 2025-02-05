@@ -1,4 +1,4 @@
-# Fine-tuning SpeechT5 TTS Model for Italian
+# 🎭 Fine-tuning SpeechT5 TTS Model for Italian
 
 [![Hugging Face Space](https://img.shields.io/badge/🤗%20Hugging%20Face-Space-yellow)](https://huggingface.co/spaces/Aumkeshchy2003/Italian_TTS)
 
