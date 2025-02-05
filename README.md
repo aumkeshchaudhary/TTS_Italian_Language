@@ -1,138 +1,149 @@
 # Fine-tuning SpeechT5 TTS Model for Italian
- Link to huggingface space:   
-                         
-                          Aumkeshchy2003/Italian_TTS
-    
-This repository provides a comprehensive guide to fine-tuning the SpeechT5 Text-to-Speech (TTS) model on Italian language datasets. The goal is to adapt Microsoft’s SpeechT5 model to generate Italian speech from text, leveraging the power of the Hugging Face Transformers library.
-Table of Contents
 
-    Introduction
-    Requirements
-    Dataset Preparation
-    Model Fine-tuning
-    Usage
-    Results
-    References
+[![Hugging Face Space](https://img.shields.io/badge/🤗%20Hugging%20Face-Space-yellow)](https://huggingface.co/spaces/Aumkeshchy2003/Italian_TTS)
 
-Introduction
+Transform Italian text into natural speech with our fine-tuned SpeechT5 model. This repository provides a comprehensive guide to adapting Microsoft's SpeechT5 model for Italian Text-to-Speech (TTS), utilizing the Hugging Face Transformers library.
 
-SpeechT5 is a powerful model designed by Microsoft for Text-to-Speech tasks. It has demonstrated superior performance in many languages, but here, we aim to fine-tune it specifically for Italian. This README explains the process of preparing data, setting up the environment, fine-tuning the model, and generating Italian speech.
-Requirements
+## 📑 Table of Contents
 
-Before getting started, make sure you have the following dependencies installed:
+- [Introduction](#introduction)
+- [Requirements](#requirements)
+- [Dataset Preparation](#dataset-preparation)
+- [Model Fine-tuning](#model-fine-tuning)
+- [Usage](#usage)
+- [Results](#results)
+- [References](#references)
 
-    Python 3.7+
-    PyTorch >= 1.9.0
-    Transformers >= 4.28.0
-    Datasets
-    torchaudio
-    librosa
-    numpy
-    gradio (for inference demo)
+## 🎯 Introduction
 
-You can install the required packages by running:
+SpeechT5, Microsoft's powerful Text-to-Speech model, has shown remarkable performance across various languages. This project focuses on fine-tuning it specifically for Italian, providing you with the tools and instructions needed to create high-quality Italian synthetic speech.
 
-    pip install torch transformers datasets torchaudio librosa gradio
+## 🛠️ Requirements
 
-**Dataset Preparation**
+### Prerequisites
+- Python 3.7+
+- PyTorch >= 1.9.0
+- Transformers >= 4.28.0
+- Datasets
+- torchaudio
+- librosa
+- numpy
+- gradio (for inference demo)
 
-For fine-tuning the TTS model, we need an Italian language dataset. Ensure that your dataset is structured in a format compatible with Hugging Face datasets library.
+### Installation
 
-Each data point should include:
+```bash
+pip install torch transformers datasets torchaudio librosa gradio
+```
 
-    text: The input Italian text to be spoken.
-    audio: The corresponding speech waveform.
+## 📊 Dataset Preparation
 
-You can preprocess your dataset like this:
+Prepare your Italian dataset in a format compatible with the Hugging Face datasets library. Each data point should contain:
+- `text`: Italian text input
+- `audio`: Corresponding speech waveform
 
-    import librosa
-    from datasets import Dataset
+Here's how to preprocess your dataset:
 
-    # Example: Loading an Italian dataset
-    dataset = Dataset.from_dict({
-       "text": ["Ciao, come stai?", "Buongiorno a tutti!"],
-       "audio": ["path_to_audio_file1.wav", "path_to_audio_file2.wav"]
-      })
+```python
+import librosa
+from datasets import Dataset
 
-    # Load the audio
-    def load_audio(batch):
-        speech_array, sampling_rate = librosa.load(batch["audio"], sr=16000)
-        batch["speech_array"] = speech_array
-        batch["sampling_rate"] = sampling_rate
-        return batch
+# Example: Loading an Italian dataset
+dataset = Dataset.from_dict({
+    "text": ["Ciao, come stai?", "Buongiorno a tutti!"],
+    "audio": ["path_to_audio_file1.wav", "path_to_audio_file2.wav"]
+})
 
-    dataset = dataset.map(load_audio)
+# Load the audio
+def load_audio(batch):
+    speech_array, sampling_rate = librosa.load(batch["audio"], sr=16000)
+    batch["speech_array"] = speech_array
+    batch["sampling_rate"] = sampling_rate
+    return batch
 
-**Model Fine-tuning**
-***Steps***
+dataset = dataset.map(load_audio)
+```
 
-    1. Initialize the model and tokenizer:
+## 🔄 Model Fine-tuning
 
-     from transformers import SpeechT5ForTextToSpeech, SpeechT5Processor
-     import torch
-     # Load the pre-trained SpeechT5 model and processor
-     model = SpeechT5ForTextToSpeech.from_pretrained("microsoft/speecht5_tts")
-     processor = SpeechT5Processor.from_pretrained("microsoft/speecht5_tts")
+### Step 1: Initialize Model and Tokenizer
 
-   2. Prepare for fine-tuning:
-    
-    Make sure your dataset and model inputs are correctly processed.
+```python
+from transformers import SpeechT5ForTextToSpeech, SpeechT5Processor
+import torch
 
-   3. Train the model:
+# Load the pre-trained SpeechT5 model and processor
+model = SpeechT5ForTextToSpeech.from_pretrained("microsoft/speecht5_tts")
+processor = SpeechT5Processor.from_pretrained("microsoft/speecht5_tts")
+```
 
-    from transformers import Trainer, TrainingArguments
-    # Define training arguments
-    training_args = TrainingArguments(
-      output_dir="./results",
-      per_device_train_batch_size=2,
-      num_train_epochs=3,
-      logging_dir='./logs',
-      save_steps=500,
-    )
+### Step 2: Train the Model
 
-    # Initialize Trainer
-     trainer = Trainer(
-       model=model,
-       args=training_args,
-       train_dataset=dataset,
-      )
+```python
+from transformers import Trainer, TrainingArguments
 
-    # Train the model
-     trainer.train()
+# Define training arguments
+training_args = TrainingArguments(
+    output_dir="./results",
+    per_device_train_batch_size=2,
+    num_train_epochs=3,
+    logging_dir='./logs',
+    save_steps=500,
+)
 
-   4. Save the model:
+# Initialize Trainer
+trainer = Trainer(
+    model=model,
+    args=training_args,
+    train_dataset=dataset,
+)
 
-    After fine-tuning, save your model for later inference.
+# Train the model
+trainer.train()
+```
 
-    model.save_pretrained("./fine_tuned_speecht5_italian")
-    processor.save_pretrained("./fine_tuned_speecht5_italian")
+### Step 3: Save the Model
 
-**Usage**
+```python
+model.save_pretrained("./fine_tuned_speecht5_italian")
+processor.save_pretrained("./fine_tuned_speecht5_italian")
+```
 
-Once the model is fine-tuned, you can generate Italian speech from any text.
+## 💫 Usage
 
-    from transformers import SpeechT5ForTextToSpeech, SpeechT5Processor
-    import torch
-    import gradio as gr
+Generate Italian speech using your fine-tuned model:
 
-    # Load fine-tuned model
-    model = SpeechT5ForTextToSpeech.from_pretrained("./fine_tuned_speecht5_italian")
-    processor = SpeechT5Processor.from_pretrained("./fine_tuned_speecht5_italian")
+```python
+from transformers import SpeechT5ForTextToSpeech, SpeechT5Processor
+import torch
+import gradio as gr
 
-    def tts_infer(text):
-      inputs = processor(text, return_tensors="pt")
-      speech = model.generate(**inputs)
-      return speech
+# Load fine-tuned model
+model = SpeechT5ForTextToSpeech.from_pretrained("./fine_tuned_speecht5_italian")
+processor = SpeechT5Processor.from_pretrained("./fine_tuned_speecht5_italian")
 
-    # Run demo using Gradio
-     demo = gr.Interface(fn=tts_infer, inputs="text", outputs="audio")
-     demo.launch()
+def tts_infer(text):
+    inputs = processor(text, return_tensors="pt")
+    speech = model.generate(**inputs)
+    return speech
 
-**Results**
+# Run demo using Gradio
+demo = gr.Interface(fn=tts_infer, inputs="text", outputs="audio")
+demo.launch()
+```
 
-After fine-tuning, you should be able to generate realistic Italian speech. Further improvements can be achieved by experimenting with the dataset, hyperparameters, and training epochs.
-References
+## 📊 Results
 
-   * SpeechT5 on Hugging Face
-   * Transformers Documentation
+After fine-tuning, you'll be able to generate natural-sounding Italian speech. Model performance can be further enhanced by:
+- Experimenting with different hyperparameters
+- Adjusting the number of training epochs
+- Using larger or more diverse datasets
 
+## 📚 References
+
+- [SpeechT5 on Hugging Face](https://huggingface.co/microsoft/speecht5_tts)
+- [Transformers Documentation](https://huggingface.co/docs/transformers/index)
+
+---
+
+💡 Try out the model on our [Hugging Face Space](https://huggingface.co/spaces/Aumkeshchy2003/Italian_TTS)!
