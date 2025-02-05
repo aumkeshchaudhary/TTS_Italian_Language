@@ -1,10 +1,10 @@
-# 🎭 Fine-tuning SpeechT5 TTS Model for Italian
+#  Fine-tuning SpeechT5 TTS Model for Italian
 
 [![Hugging Face Space](https://img.shields.io/badge/🤗%20Hugging%20Face-Space-yellow)](https://huggingface.co/spaces/Aumkeshchy2003/Italian_TTS)
 
 Transform Italian text into natural speech with our fine-tuned SpeechT5 model. This repository provides a comprehensive guide to adapting Microsoft's SpeechT5 model for Italian Text-to-Speech (TTS), utilizing the Hugging Face Transformers library.
 
-## 📑 Table of Contents
+##  Table of Contents
 
 - [Introduction](#introduction)
 - [Requirements](#requirements)
@@ -14,11 +14,11 @@ Transform Italian text into natural speech with our fine-tuned SpeechT5 model. T
 - [Results](#results)
 - [References](#references)
 
-## 🎯 Introduction
+##  Introduction
 
 SpeechT5, Microsoft's powerful Text-to-Speech model, has shown remarkable performance across various languages. This project focuses on fine-tuning it specifically for Italian, providing you with the tools and instructions needed to create high-quality Italian synthetic speech.
 
-## 🛠️ Requirements
+##  Requirements
 
 ### Prerequisites
 - Python 3.7+
@@ -36,7 +36,7 @@ SpeechT5, Microsoft's powerful Text-to-Speech model, has shown remarkable perfor
 pip install torch transformers datasets torchaudio librosa gradio
 ```
 
-## 📊 Dataset Preparation
+##  Dataset Preparation
 
 Prepare your Italian dataset in a format compatible with the Hugging Face datasets library. Each data point should contain:
 - `text`: Italian text input
@@ -64,7 +64,7 @@ def load_audio(batch):
 dataset = dataset.map(load_audio)
 ```
 
-## 🔄 Model Fine-tuning
+##  Model Fine-tuning
 
 ### Step 1: Initialize Model and Tokenizer
 
@@ -109,7 +109,7 @@ model.save_pretrained("./fine_tuned_speecht5_italian")
 processor.save_pretrained("./fine_tuned_speecht5_italian")
 ```
 
-## 💫 Usage
+##  Usage
 
 Generate Italian speech using your fine-tuned model:
 
@@ -132,14 +132,14 @@ demo = gr.Interface(fn=tts_infer, inputs="text", outputs="audio")
 demo.launch()
 ```
 
-## 📊 Results
+##  Results
 
 After fine-tuning, you'll be able to generate natural-sounding Italian speech. Model performance can be further enhanced by:
 - Experimenting with different hyperparameters
 - Adjusting the number of training epochs
 - Using larger or more diverse datasets
 
-## 📚 References
+##  References
 
 - [SpeechT5 on Hugging Face](https://huggingface.co/microsoft/speecht5_tts)
 - [Transformers Documentation](https://huggingface.co/docs/transformers/index)
